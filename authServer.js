@@ -39,7 +39,7 @@ function generateCodeChallenge(codeVerifier) {
   return base64url(crypto.createHash("sha256").update(codeVerifier).digest());
 }
 
-let localMaintToken = await getMaintenanceToken();
+let localMaintToken;
 
 
 // Ruta para iniciar el flujo de autenticación
@@ -57,6 +57,7 @@ app.get("/auth/callback", async (req, res) => {
   const { code } = req.query;
   const codeVerifier = req.session.codeVerifier; // Obtener el code_verifier de la sesión
 
+  localMaintToken = await getMaintenanceToken();
   try {
     // Intercambiar el código de autorización por un token de acceso
     const tokenResponse = await axios.post(
